@@ -1,0 +1,5 @@
+.app-shell{max-width:1180px;margin:0 auto;padding:24px 20px;font-family:Inter,system-ui,sans-serif;color:#0f172a;}
+.page-header{margin-bottom:24px;padding:22px 24px;border:1px solid #cbd5e1;border-radius:20px;background:#f8fafc;}
+.page-header h1{margin:0;font-size:2rem;color:#0f172a;}
+.page-header p{margin:8px 0 0;color:#475569;line-height:1.6;}
+.component-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;}

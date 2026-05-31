@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Appointment } from '../models/appointment';
 import { OnInit } from '@angular/core';
+import { Todo } from '../models/todo';
 
 @Component({
   selector: 'app-appointment-list',
@@ -9,36 +9,49 @@ import { OnInit } from '@angular/core';
 })
 export class AppointmentListComponent implements OnInit {
 
-  newAppointmentTitle : string = "";
-  newAppointmentDate : Date = new Date();
+  newTodoTitle: string = "";
+  todos: Todo[] = [];
+  oneWayText: string = "text";
 
-  appointments: Appointment[] = []
-
-  ngOnInit(): void {
-    let savedAppointments = localStorage.getItem("appointments")
-    this.appointments = savedAppointments ? JSON.parse(savedAppointments) : []
+  get remainingCount(): number {
+    return this.todos.filter(todo => !todo.completed).length;
   }
 
-  addAppointment(){
-    if(this.newAppointmentTitle.trim().length && this.newAppointmentDate){
-      let newAppointment: Appointment = {
+  get completedCount(): number {
+    return this.todos.filter(todo => todo.completed).length;
+  }
+
+  ngOnInit(): void {
+    const savedTodos = localStorage.getItem('todos');
+    this.todos = savedTodos ? JSON.parse(savedTodos) : [];
+  }
+
+  addTodo() {
+    if (this.newTodoTitle.trim().length) {
+      const newTodo: Todo = {
         id: Date.now(),
-        title: this.newAppointmentTitle,
-        date: this.newAppointmentDate
-      }
+        title: this.newTodoTitle.trim(),
+        completed: false
+      };
 
-      this.appointments.push(newAppointment)
-
-      this.newAppointmentTitle = "";
-      this.newAppointmentDate = new Date();
-
-      localStorage.setItem("appointments", JSON.stringify(this.appointments))
+      this.todos.push(newTodo);
+      this.newTodoTitle = "";
+      this.saveTodos();
     }
   }
 
-  deleteAppointment(index: number){
-    this.appointments.splice(index, 1)
-    localStorage.setItem("appointments", JSON.stringify(this.appointments))
+  toggleCompleted(todo: Todo) {
+    todo.completed = !todo.completed;
+    this.saveTodos();
+  }
+
+  deleteTodo(index: number) {
+    this.todos.splice(index, 1);
+    this.saveTodos();
+  }
+
+  private saveTodos() {
+    localStorage.setItem('todos', JSON.stringify(this.todos));
   }
 
 }
